@@ -1,0 +1,1 @@
+export function GET(){return Response.json({mode:'demo',version:'0.2.0-recovery',services:{database:false,video:false,payments:false,offline:false},links:{ios:process.env.APP_STORE_URL||'',android:process.env.GOOGLE_PLAY_URL||'',apk:process.env.ANDROID_APK_URL||''}},{headers:{'Cache-Control':'no-store'}});}

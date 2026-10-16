@@ -1,0 +1,1 @@
+export default function NotFound(){return <main style={{maxWidth:480,margin:'12vh auto',padding:25}}><h1>Boggan lama helin.</h1><p>Dooro Student, Admin ama Website si aad u sii wadato.</p><a className="btn orange" href="/preview">Fur Smart Collage</a></main>;}
