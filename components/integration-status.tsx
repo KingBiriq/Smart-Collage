@@ -1,0 +1,4 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {Badge} from './ui';
+export function IntegrationStatus(){const [value,setValue]=useState<{database:boolean;video:boolean}|null>(null);useEffect(()=>{fetch('/api/config').then(r=>r.json()).then(v=>setValue(v.services)).catch(()=>{});},[]);return <div className="panel"><h3>Xiriirka adeegyada</h3><p>Supabase <Badge tone={value?.database?'green':'orange'}>{value?.database?'Dejinta waa jirtaa':'Dejinta ayaa dhiman'}</Badge></p><p>Bunny Stream <Badge tone={value?.video?'green':'orange'}>{value?.video?'Dejinta waa jirtaa':'Dejinta ayaa dhiman'}</Badge></p><p>Dejintu keliya ma xaqiijiso xiriir shaqeynaya. Tijaabi kaydinta xogta iyo upload-ka marka furayaasha la geliyo.</p><a href="https://vercel.com/dashboard" target="_blank" rel="noreferrer">Vercel → Smart Collage → Settings → Environment Variables</a></div>;}

@@ -1,0 +1,11 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {Field,Icon,Logo} from './ui';
+export function AdminAccess({children}:{children:React.ReactNode}){
+ const [state,setState]=useState<'loading'|'demo'|'login'|'admin'|'error'>('loading'),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
+ async function check(){try{const r=await fetch('/api/auth',{cache:'no-store'}),v=await r.json();if(!r.ok)throw new Error(v.error);setState(!v.configured?'demo':v.admin?'admin':'login');}catch{setState('error');}}
+ useEffect(()=>{void check();},[]);
+ if(state==='demo')return <>{children}</>;
+ if(state==='admin')return <><div className="cloud-admin-bar"><span><Icon name="shield" size={16}/>Maamulka · Supabase</span><button onClick={async()=>{const r=await fetch('/api/auth',{method:'DELETE'});if(r.ok)setState('login');else setMessage('Ka bixiddu ma dhammaan. Mar kale isku day.');}}>Ka bax</button>{message&&<span role="alert">{message}</span>}</div>{children}</>;
+ return <main className="admin-login"><div className="panel"><Logo/><span className="eyebrow">SMART COLLAGE · MAAMULKA</span><h1>{state==='loading'?'Waa la hubinayaa…':'Gal maamulka'}</h1>{state==='error'?<><p>Xiriirka server-ka lama xaqiijin.</p><button className="btn blue" onClick={check}>Mar kale isku day</button></>:state==='login'?<form onSubmit={async e=>{e.preventDefault();setBusy(true);setMessage('');const f=new FormData(e.currentTarget);try{const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:f.get('email'),password:f.get('password'),requireAdmin:true})});const v=await r.json();if(!r.ok)throw new Error(v.error);setState('admin');}catch(e){setMessage(e instanceof Error?e.message:'Gelitaanku ma dhammaan.');}finally{setBusy(false);}}}><p>Isticmaal akoonka dugsiga ee loo oggolaaday maamulka.</p><Field label="Email"><input name="email" type="email" autoComplete="username" required/></Field><Field label="Password"><input name="password" type="password" autoComplete="current-password" required/></Field><p role="alert">{message}</p><button disabled={busy} className="btn orange full">{busy?'Waa la hubinayaa…':'Gal maamulka'}</button></form>:null}<a href="/">Ku noqo website-ka</a></div></main>;
+}
